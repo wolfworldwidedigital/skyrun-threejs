@@ -1,9 +1,7 @@
 import * as THREE from 'three';
 
-// Create the scene
 const scene = new THREE.Scene();
 
-// Use an OrthographicCamera for a 2D view
 const camera = new THREE.OrthographicCamera(
   window.innerWidth / -2,
   window.innerWidth / 2,
@@ -13,15 +11,12 @@ const camera = new THREE.OrthographicCamera(
   1000
 );
 
-// Set the camera to be static
 camera.position.z = 1;
 
-// Create the renderer
 const renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Set the video as the background
 const setVideoBackground = () => {
   const video = document.createElement('video');
   video.autoplay = true;
@@ -57,6 +52,26 @@ const interactiveElement = new THREE.Mesh(
   new THREE.MeshBasicMaterial({ visible: false }) // Invisible mesh that will catch mouse events
 );
 scene.add(interactiveElement);
+
+const scrollContainer = document.getElementById('scroll-container');
+
+// Only add event listeners if scrollContainer is not null
+if (scrollContainer) {
+  let startX;
+  let scrollLeft;
+
+  scrollContainer.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].pageX - scrollContainer.offsetLeft;
+    scrollLeft = scrollContainer.scrollLeft;
+  }, { passive: true });
+
+  scrollContainer.addEventListener('touchmove', (e) => {
+    e.preventDefault(); // Prevent the default vertical scroll
+    const x = e.touches[0].pageX - scrollContainer.offsetLeft;
+    const walk = (x - startX) * 2; // Multiply for speed
+    scrollContainer.scrollLeft = scrollLeft - walk;
+  }, { passive: false });
+}
 
 // Set up raycaster for mouse interaction
 const raycaster = new THREE.Raycaster();

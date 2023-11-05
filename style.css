@@ -10,3 +10,15 @@ body {
 .invisible {
   display: none;
 }
+
+#scroll-container {
+  display: flex;
+  overflow-x: auto;
+  width: 100vw;
+  height: 100vh;
+}
+
+.scroll-item {
+  flex: 0 0 auto; /* Do not grow, do not shrink, and be automatically sized by its width and height */
+  width: 100vw; /* Adjust this to the desired width of each child */
+}
